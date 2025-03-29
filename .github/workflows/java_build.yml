@@ -18,7 +18,7 @@ jobs:
   build:
     strategy:
       matrix:
-        java_version: ${{ env.$JAVA_VERSION }}
+        java_version: ${{ fromJson(inputs.java_versions) }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -32,4 +32,4 @@ jobs:
       
       - name: Build Maven
         run: |
-          echo "Build maven ${{ env.$JAVA_VERSION }}"
+          echo "Build maven ${{ matrix.java_version }}"
