@@ -19,7 +19,7 @@ jobs:
   build:
     strategy:
       matrix:
-        react_version: ${{ fromJson(inputs.react_version) }}
+        react_version: ${{ inputs.react_version }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
