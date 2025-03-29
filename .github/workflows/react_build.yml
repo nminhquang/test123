@@ -3,34 +3,35 @@ name: React build workflow
 
 on:
   workflow_call:
-    inputs:
-      react_version:
-        description: "React versions to test against"
-        required: false
-        type: string
-      node_version:
-        description: "Node.js version to use"
-        required: false
-        default: "18"
-        type: string
 
 
 jobs:
   build:
-    strategy:
-      matrix:
-        react_version: ${{ fromJson(inputs.react_version) }}
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout workflow-template repo
+        uses: actions/checkout@v4
+        with:
+          repository: nminhquang/test123
+          path: workflow-template
+
+      - name: Read Variable File
+        id: read-vars
+        run: |
+          ls -la workflow-template/variables
+          pwd
+          source workflow-template/variables/$(basename $GITHUB_REPOSITORY).env
+          echo "REACT_VERSION=$REACT_VERSION" >> $GITHUB_ENV
+          echo "NODE_VERSION=$NODE_VERSION" >> $GITHUB_ENV
       - name: Checkout Code
         uses: actions/checkout@v4
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ inputs.node_version }}
+          node-version: ${{ env.NODE_VERSION }}
       - name: Install Specific React Version
-        run: npm install react@${{ matrix.react_version }} react-dom@${{ matrix.react_version }}
+        run: npm install react@${{ env.REACT_VERSION }} react-dom@${{ env.REACT_VERSION }}
 
       - name: Build React
         run: |
-          echo "Build React ${{ matrix.react_version }} with node ${{ matrix.react_version }}"
+          echo "Build React ${{ env.REACT_VERSION }} with node ${{ env.REACT_VERSION }}"
