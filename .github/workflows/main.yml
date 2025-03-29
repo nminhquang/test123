@@ -9,7 +9,7 @@ jobs:
     outputs:
       java_version: ${{ steps.read-vars.outputs.JAVA_VERSION }}
       python_version: ${{ steps.read-vars.outputs.PYTHON_VERSION }}
-      react_versions: ${{ steps.read-vars.outputs.REACT_VERSION }}
+      react_version: ${{ steps.read-vars.outputs.REACT_VERSION }}
     steps:
       - name: Checkout workflow-template repo
         uses: actions/checkout@v4
@@ -34,7 +34,7 @@ jobs:
   react-build:
     needs: fetch-config
     uses: ./.github/workflows/react_build.yml
-    if: ${{ needs.fetch-config.outputs.react_versions }} != ""
+    if: ${{ needs.fetch-config.outputs.react_version }} != ""
     with:
-      react_versions: ${{ needs.fetch-config.outputs.react_versions }}
+      react_version: ${{ needs.fetch-config.outputs.react_version }}
           
