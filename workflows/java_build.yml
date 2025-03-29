@@ -1,0 +1,35 @@
+# Reusable workflow
+name: Java build workflow
+
+on:
+  workflow_call:
+    inputs:
+      java_versions:
+        description: "Java versions to test against"
+        required: true
+        type: string
+      build_command:
+        description: "Build command (e.g., 'mvn package' or 'gradle build')"
+        required: false
+        default: "mvn package"
+        type: string
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        java_version: ${{ env.$JAVA_VERSION }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Setup Java ${{ matrix.java_version }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: ${{ matrix.java_version }}
+      
+      - name: Build Maven
+        run: |
+          echo "Build maven ${{ env.$JAVA_VERSION }}"
