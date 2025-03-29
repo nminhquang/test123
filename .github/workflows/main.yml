@@ -1,12 +1,7 @@
 name: CI/CD Pipeline
 
 on:
-  push:
-    branches:
-      - main
-      - releases/
-      - Hotfix/
-      - develop
+  workflow_call:
 
 jobs:
   fetch-config:
