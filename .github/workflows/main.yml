@@ -33,12 +33,12 @@ jobs:
     uses: ./.github/workflows/java_build.yml
     if: ${{ needs.fetch-config.outputs.workflow_type }} == "java"
     with:
-      java_version: ["${{ needs.fetch-config.outputs.java_version }}"]
+      java_version: '[${{ needs.fetch-config.outputs.java_version }}]'
   
   react-build:
     needs: fetch-config
     uses: ./.github/workflows/react_build.yml
     if: ${{ needs.fetch-config.outputs.workflow_type }} == "react"
     with:
-      react_version: ["${{ needs.fetch-config.outputs.react_version }}"]
+      react_version: '[${{ needs.fetch-config.outputs.react_version }}]'
           
