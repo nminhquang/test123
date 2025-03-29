@@ -6,7 +6,7 @@ on:
     inputs:
       java_versions:
         description: "Java versions to test against"
-        required: true
+        required: false
         type: string
       build_command:
         description: "Build command (e.g., 'mvn package' or 'gradle build')"
