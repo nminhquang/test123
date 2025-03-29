@@ -26,15 +26,15 @@ jobs:
           echo "REACT_VERSION=$REACT_VERSION" >> $GITHUB_OUTPUT
   java-build:
     needs: fetch-config
-    uses: nminhquang/test123/workflows/java_build.yml@main
-    if: ${{ needs.fetch-config.outputs.java_version }} =! ""
+    uses: .github/workflows/java_build.yml@main
+    if: ${{ needs.fetch-config.outputs.java_version }} != ""
     with:
       java_version: ${{ needs.fetch-config.outputs.java_version }}
   
   react-build:
     needs: fetch-config
-    uses: nminhquang/test123/workflows/java_build.yml@main
-    if: ${{ needs.fetch-config.outputs.react_versions }} =! ""
+    uses: .github/workflows/react_build.yml@main
+    if: ${{ needs.fetch-config.outputs.react_versions }} != ""
     with:
       react_versions: ${{ needs.fetch-config.outputs.react_versions }}
           
