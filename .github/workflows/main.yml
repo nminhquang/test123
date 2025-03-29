@@ -20,7 +20,7 @@ jobs:
       - name: Read Variable File
         id: read-vars
         run: |
-          source workflow-template/variables/${{ github.repository }}.env
+          source workflow-template/variables/$(basename $GITHUB_REPOSITORY).env
           echo "JAVA_VERSION=$JAVA_VERSION" >> $GITHUB_OUTPUT
           echo "PYTHON_VERSION=$PYTHON_VERSION" >> $GITHUB_OUTPUT
           echo "REACT_VERSION=$REACT_VERSION" >> $GITHUB_OUTPUT
