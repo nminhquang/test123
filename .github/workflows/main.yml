@@ -10,6 +10,7 @@ jobs:
       java_version: ${{ steps.read-vars.outputs.JAVA_VERSION }}
       python_version: ${{ steps.read-vars.outputs.PYTHON_VERSION }}
       react_version: ${{ steps.read-vars.outputs.REACT_VERSION }}
+      workflow_type: ${{ steps.read-vars.outputs.WORKFLOW_TYPE }}
     steps:
       - name: Checkout workflow-template repo
         uses: actions/checkout@v4
@@ -23,20 +24,21 @@ jobs:
           ls -la workflow-template/variables
           pwd
           source workflow-template/variables/$(basename $GITHUB_REPOSITORY).env
+          echo "WORKFLOW_TYPE=$WORKFLOW_TYPE" >> $GITHUB_OUTPUT
           echo "JAVA_VERSION=$JAVA_VERSION" >> $GITHUB_OUTPUT
           echo "PYTHON_VERSION=$PYTHON_VERSION" >> $GITHUB_OUTPUT
           echo "REACT_VERSION=$REACT_VERSION" >> $GITHUB_OUTPUT
   java-build:
     needs: fetch-config
     uses: ./.github/workflows/java_build.yml
-    if: ${{ needs.fetch-config.outputs.java_version }} != ""
+    if: ${{ needs.fetch-config.outputs.workflow_type }} == "java"
     with:
-      java_version: ${{ needs.fetch-config.outputs.java_version }}
+      java_version: ["${{ needs.fetch-config.outputs.java_version }}"]
   
   react-build:
     needs: fetch-config
     uses: ./.github/workflows/react_build.yml
-    if: ${{ needs.fetch-config.outputs.react_version }} != ""
+    if: ${{ needs.fetch-config.outputs.workflow_type }} == "react"
     with:
-      react_version: ${{ needs.fetch-config.outputs.react_version }}
+      react_version: ["${{ needs.fetch-config.outputs.react_version }}"]
           

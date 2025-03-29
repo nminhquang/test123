@@ -18,7 +18,7 @@ jobs:
   build:
     strategy:
       matrix:
-        java_version: ${{ inputs.java_version }}
+        java_version: ${{ fromJson(inputs.java_version) }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
