@@ -1,0 +1,36 @@
+# Reusable workflow
+name: React build workflow
+
+on:
+  workflow_call:
+    inputs:
+      react_versions:
+        description: "React versions to test against"
+        required: true
+        type: string
+      node_version:
+        description: "Node.js version to use"
+        required: false
+        default: "18"
+        type: string
+
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        react_version: ${{ fromJson(inputs.react_versions) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node_version }}
+      - name: Install Specific React Version
+        run: npm install react@${{ matrix.react_version }} react-dom@${{ matrix.react_version }}
+
+      - name: Build React
+        run: |
+          echo "Build React ${{ matrix.react_version }} with node ${{ matrix.react_version }}"
