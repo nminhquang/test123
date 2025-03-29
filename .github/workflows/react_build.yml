@@ -4,7 +4,7 @@ name: React build workflow
 on:
   workflow_call:
     inputs:
-      react_versions:
+      react_version:
         description: "React versions to test against"
         required: false
         type: string
@@ -19,7 +19,7 @@ jobs:
   build:
     strategy:
       matrix:
-        react_version: ${{ fromJson(inputs.react_versions) }}
+        react_version: ${{ fromJson(inputs.react_version) }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
