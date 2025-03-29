@@ -3,33 +3,33 @@ name: Java build workflow
 
 on:
   workflow_call:
-    inputs:
-      java_version:
-        description: "Java versions to test against"
-        required: false
-        type: string
-      build_command:
-        description: "Build command (e.g., 'mvn package' or 'gradle build')"
-        required: false
-        default: "mvn package"
-        type: string
-
 jobs:
   build:
-    strategy:
-      matrix:
-        java_version: ${{ fromJson(inputs.java_version) }}
     runs-on: ubuntu-latest
     steps:
+
+      - name: Checkout workflow-template repo
+        uses: actions/checkout@v4
+        with:
+          repository: nminhquang/test123
+          path: workflow-template
+
+      - name: Read Variable File
+        id: read-vars
+        run: |
+          ls -la workflow-template/variables
+          pwd
+          source workflow-template/variables/$(basename $GITHUB_REPOSITORY).env
+          echo "JAVA_VERSION=$JAVA_VERSION" >> $GITHUB_ENV
       - name: Checkout Code
         uses: actions/checkout@v4
       
-      - name: Setup Java ${{ matrix.java_version }}
+      - name: Setup Java ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v3
         with:
           distribution: "temurin"
-          java-version: ${{ matrix.java_version }}
+          java-version: ${{ env.JAVA_VERSION }}
       
       - name: Build Maven
         run: |
-          echo "Build maven ${{ matrix.java_version }}"
+          echo "Build maven ${{ env.JAVA_VERSION }}"
