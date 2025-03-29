@@ -20,7 +20,7 @@ jobs:
       - name: Read Variable File
         id: read-vars
         run: |
-          ls -la 
+          ls -la workflow-template
           pwd
           source workflow-template/variables/$(basename $GITHUB_REPOSITORY).env
           echo "JAVA_VERSION=$JAVA_VERSION" >> $GITHUB_OUTPUT
