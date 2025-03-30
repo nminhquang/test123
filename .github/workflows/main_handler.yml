@@ -28,6 +28,7 @@ jobs:
         run: |
           ls -la workflow-template/variables
           pwd
+          echo ${{ inputs.repo_name }}
           source workflow-template/variables/$(basename $GITHUB_REPOSITORY).env
           echo "WORKFLOW_TYPE=$WORKFLOW_TYPE" >> $GITHUB_OUTPUT
           echo "JAVA_VERSION=$JAVA_VERSION" >> $GITHUB_OUTPUT
