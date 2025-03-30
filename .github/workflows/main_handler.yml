@@ -1,0 +1,43 @@
+name: CI/CD Pipeline
+
+on:
+  workflow_call:
+    inputs:
+      repo_name:
+        required: true
+        type: string
+
+jobs:
+  load-config:
+    runs-on: ubuntu-latest
+    outputs:
+      java_version: ${{ steps.get-config.outputs.JAVA_VERSION }}
+      language: ${{ steps.get-config.outputs.LANGUAGE }}
+      python_version: ${{ steps.get-config.outputs.PYTHON_VERSION }}
+      react_version: ${{ steps.get-config.outputs.REACT_VERSION }}
+      workflow_type: ${{ steps.get-config.outputs.WORKFLOW_TYPE }}
+    steps:
+      - name: Checkout workflow-template repo
+        uses: actions/checkout@v4
+        with:
+          repository: nminhquang/test123
+          path: workflow-template
+
+      - name: Read Variable File
+        id: get-config
+        run: |
+          ls -la workflow-template/variables
+          pwd
+          source workflow-template/variables/$(basename $GITHUB_REPOSITORY).env
+          echo "WORKFLOW_TYPE=$WORKFLOW_TYPE" >> $GITHUB_OUTPUT
+          echo "JAVA_VERSION=$JAVA_VERSION" >> $GITHUB_OUTPUT
+          echo "PYTHON_VERSION=$PYTHON_VERSION" >> $GITHUB_OUTPUT
+          echo "REACT_VERSION=$REACT_VERSION" >> $GITHUB_OUTPUT
+  run-ci:
+    needs: load-config
+    uses: ./.github/workflows/${{ needs.load-config.outputs.workflow_type }}_build.yml
+    with:
+      java_version: ${{ needs.load-config.outputs.java_version }}
+      python_version: ${{ needs.load-config.outputs.python_version }}
+      react_version: ${{ needs.load-config.outputs.react_version }}
+  
