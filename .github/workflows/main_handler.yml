@@ -35,13 +35,13 @@ jobs:
           echo "PYTHON_VERSION=$PYTHON_VERSION" >> $GITHUB_OUTPUT
           echo "REACT_VERSION=$REACT_VERSION" >> $GITHUB_OUTPUT
   run-java-ci:
-    if: always() && (needs.load-config.outputs.workflow_type == 'java')
+    if: ${{ needs.load-config.outputs.workflow_type == 'java' }}
     needs: load-config
     uses: ./.github/workflows/java_build.yml
     with:
       java_version: ${{ needs.load-config.outputs.java_version }}
   run-react-ci:
-    if: always() && (needs.load-config.outputs.workflow_type == 'react')
+    if: ${{ needs.load-config.outputs.workflow_type == 'react' }}
     needs: load-config
     uses: ./.github/workflows/react_build.yml
     with:
