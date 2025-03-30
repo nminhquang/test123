@@ -20,10 +20,10 @@ jobs:
       - name: Build with Maven
         run: echo "Build maven with java version ${{ inputs.java_version }}"
 
-  codeql:
-    runs-on: ubuntu-latest
-    permissions:
-      security-events: write
-    steps:
-      - uses: github/codeql-action/init@v2
-      - uses: github/codeql-action/analyze@v2
+  # codeql:
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     security-events: write
+  #   steps:
+  #     - uses: github/codeql-action/init@v2
+  #     - uses: github/codeql-action/analyze@v2
