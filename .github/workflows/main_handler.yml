@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       java_version: ${{ steps.get-config.outputs.JAVA_VERSION }}
-      language: ${{ steps.get-config.outputs.LANGUAGE }}
+      node_version: ${{ steps.get-config.outputs.NODE_VERSION }}
       python_version: ${{ steps.get-config.outputs.PYTHON_VERSION }}
       react_version: ${{ steps.get-config.outputs.REACT_VERSION }}
       workflow_type: ${{ steps.get-config.outputs.WORKFLOW_TYPE }}
@@ -34,11 +34,17 @@ jobs:
           echo "JAVA_VERSION=$JAVA_VERSION" >> $GITHUB_OUTPUT
           echo "PYTHON_VERSION=$PYTHON_VERSION" >> $GITHUB_OUTPUT
           echo "REACT_VERSION=$REACT_VERSION" >> $GITHUB_OUTPUT
-  run-ci:
+  run-java-ci:
+    if: needs.load-config.outputs.workflow_type == 'java'
     needs: load-config
-    uses: ./.github/workflows/${{ needs.load-config.outputs.workflow_type }}_build.yml
+    uses: ./.github/workflows/java_build.yml
     with:
       java_version: ${{ needs.load-config.outputs.java_version }}
-      python_version: ${{ needs.load-config.outputs.python_version }}
+  run-react-ci:
+    if: needs.load-config.outputs.workflow_type == 'react'
+    needs: load-config
+    uses: ./.github/workflows/react_build.yml
+    with:
       react_version: ${{ needs.load-config.outputs.react_version }}
+      node_version: ${{ needs.load-config.outputs.node_version }}
   

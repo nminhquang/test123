@@ -1,37 +1,29 @@
-# Reusable workflow
+
 name: React build workflow
 
 on:
   workflow_call:
-
+    inputs:
+      react_version:
+        required: true
+        type: string
+      node_version:
+        required: true
+        type: string
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout workflow-template repo
-        uses: actions/checkout@v4
-        with:
-          repository: nminhquang/test123
-          path: workflow-template
-
-      - name: Read Variable File
-        id: read-vars
-        run: |
-          ls -la workflow-template/variables
-          pwd
-          source workflow-template/variables/$(basename $GITHUB_REPOSITORY).env
-          echo "REACT_VERSION=$REACT_VERSION" >> $GITHUB_ENV
-          echo "NODE_VERSION=$NODE_VERSION" >> $GITHUB_ENV
       - name: Checkout Code
         uses: actions/checkout@v4
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: ${{ inputs.node_version }}
       - name: Install Specific React Version
-        run: npm install react@${{ env.REACT_VERSION }} react-dom@${{ env.REACT_VERSION }}
+        run: npm install react@$${{ inputs.react_version }}react-dom@${{ inputs.react_version }}
 
       - name: Build React
         run: |
-          echo "Build React ${{ env.REACT_VERSION }} with node ${{ env.REACT_VERSION }}"
+          echo "Build React ${{ inputs.react_version }} with node ${{ inputs.react_version }}"
